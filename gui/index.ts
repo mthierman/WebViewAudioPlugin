@@ -13,7 +13,7 @@ declare global {
 const gainSlider = document.getElementById("gain-slider") as HTMLInputElement;
 const gainLabel = document.getElementById("gain-label") as HTMLLabelElement;
 
-export const sendSliderValue = (sliderValue: string) => {
+const sendSliderValue = (sliderValue: string) => {
     sliderValue = parseFloat(sliderValue).toFixed(2);
     gainLabel.innerHTML = sliderValue + "dB";
 
@@ -22,7 +22,7 @@ export const sendSliderValue = (sliderValue: string) => {
     }
 };
 
-window.receiveGainValue = function receiveGainValue(val: number) {
+window.receiveGainValue = (val: number) => {
     val = Math.round(val * 1e2) / 100;
     gainLabel.innerHTML = val.toFixed(2) + " dB";
     gainSlider.value = val.toFixed(2);
