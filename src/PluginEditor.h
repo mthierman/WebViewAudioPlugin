@@ -3,8 +3,6 @@
 #include "PluginProcessor.h"
 #include <juce_gui_extra/juce_gui_extra.h>
 #include <gui/choc_WebView.h>
-#include <text/choc_MIMETypes.h>
-#include "BinaryData.h"
 
 //==============================================================================
 class AudioPluginAudioProcessorEditor final : public juce::AudioProcessorEditor

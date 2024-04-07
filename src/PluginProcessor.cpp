@@ -97,17 +97,17 @@ void AudioPluginAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     juce::ignoreUnused(midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels = getTotalNumInputChannels();
-    auto totalNumOutputChannels = getTotalNumOutputChannels();
+    auto totalNumInputChannels{getTotalNumInputChannels()};
+    auto totalNumOutputChannels{getTotalNumOutputChannels()};
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
 
-    auto gain = paramList.getRawParameterValue("GAIN")->load();
+    auto gain{paramList.getRawParameterValue("GAIN")->load()};
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        auto* channelData = buffer.getWritePointer(channel);
+        auto* channelData{buffer.getWritePointer(channel)};
 
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
         {

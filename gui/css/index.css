@@ -1,3 +1,78 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+}
+
+:root {
+    isolation: isolate;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "system-ui", "ui-sans-serif", "sans-serif";
+    line-height: 1.5;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 0.5em;
+    place-content: center;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.25em;
+}
+
+h1,
+h2,
+label,
+picture,
+img {
+    user-select: none;
+}
+
+img {
+    place-self: center;
+}
+
+input[type="range"] {
+    appearance: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+input[type="range"]:focus {
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    border-radius: 1em;
+    height: 1.5em;
+    padding: 0.25em;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 1em;
+    width: 1em;
+    border-radius: 1em;
+}
+
 @media (prefers-color-scheme: dark) {
     body {
         background-color: midnightblue;
@@ -34,67 +109,4 @@
         border: 2px solid black;
         outline: 2px solid dodgerblue;
     }
-}
-
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
-
-* {
-    margin: 0;
-}
-
-:root {
-    isolation: isolate;
-    width: 100%;
-    height: 100%;
-}
-
-body {
-    width: 100%;
-    height: 100%;
-    font-family: "system-ui", "ui-sans-serif", "sans-serif";
-    line-height: 1.5;
-}
-
-main {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    place-content: center;
-    text-align: center;
-}
-
-h1,
-label {
-    user-select: none;
-}
-
-img {
-    place-self: center;
-}
-
-input[type="range"] {
-    appearance: none;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-input[type="range"]:focus {
-    outline: none;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-    border-radius: 1em;
-    height: 1.5em;
-    padding: 0.25em;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    appearance: none;
-    height: 1em;
-    width: 1em;
-    border-radius: 1em;
 }

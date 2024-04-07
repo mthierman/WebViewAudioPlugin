@@ -31,3 +31,4 @@ BreakInheritanceList: AfterComma
 PointerAlignment: Left
 KeepEmptyLinesAtTheStartOfBlocks: true
 IndentCaseLabels: true
+LambdaBodyIndentation: OuterScope

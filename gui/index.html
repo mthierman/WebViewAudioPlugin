@@ -10,14 +10,14 @@
     </head>
     <body>
         <main>
-            <picture>
+            <picture draggable="false">
                 <source media="(prefers-color-scheme: dark)" srcset="/logo_dark.png" />
                 <source media="(prefers-color-scheme: light)" srcset="/logo_light.png" />
                 <img draggable="false" src="/logo_dark.png" alt="logo" width="350" height="auto" />
             </picture>
             <h1>Gain</h1>
             <input id="gain-slider" type="range" min="-40.0" max="6.00" value="-20.0" step="0.01" />
-            <label id="gain-label" for="gain-slider">-20.0 dB</label>
+            <h2 id="gain-label" for="gain-slider">-20.0 dB</h2>
         </main>
     </body>
 </html>

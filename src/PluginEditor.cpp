@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Resource.h"
 
 //==============================================================================
 AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudioProcessor& p)
@@ -10,59 +11,23 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     options.acceptsFirstMouseClick = true;
 
     options.fetchResource =
-        [](const std::string& path) -> std::optional<choc::ui::WebView::Options::Resource>
+        [=](const std::string& path) -> std::optional<choc::ui::WebView::Options::Resource>
     {
-        if (path == "/")
+        std::vector<Resource> resources;
+
+        resources.emplace_back(Resource("/", "index_html"));
+        resources.emplace_back(Resource("/assets/index.css", "index_css"));
+        resources.emplace_back(Resource("/assets/index.js", "index_js"));
+        resources.emplace_back(Resource("/logo_dark.png", "logo_dark_png"));
+        resources.emplace_back(Resource("/logo_light.png", "logo_light_png"));
+        resources.emplace_back(Resource("/favicon.ico", "favicon_ico"));
+
+        for (const auto& res : resources)
         {
-            return choc::ui::WebView::Options::Resource{
-                juce::String::createStringFromData(BinaryData::index_html,
-                                                   BinaryData::index_htmlSize)
-                    .toStdString(),
-                choc::web::getMIMETypeFromFilename("index.html")};
+            if (path == res.m_path) { return res.m_resource; }
         }
-        else if (path == "/assets/index.css")
-        {
-            return choc::ui::WebView::Options::Resource{
-                juce::String::createStringFromData(BinaryData::index_css, BinaryData::index_cssSize)
-                    .toStdString(),
-                choc::web::getMIMETypeFromFilename("index.css")};
-        }
-        else if (path == "/assets/index.js")
-        {
-            return choc::ui::WebView::Options::Resource{
-                juce::String::createStringFromData(BinaryData::index_js, BinaryData::index_jsSize)
-                    .toStdString(),
-                choc::web::getMIMETypeFromFilename("index.js")};
-        }
-        else if (path == "/logo_dark.png")
-        {
-            juce::MemoryBlock mb;
-            mb.replaceAll(BinaryData::logo_dark_png, BinaryData::logo_dark_pngSize);
-            return choc::ui::WebView::Options::Resource{
-                std::string(mb.begin(), mb.end()),
-                choc::web::getMIMETypeFromFilename("favicon.png")};
-        }
-        else if (path == "/logo_light.png")
-        {
-            juce::MemoryBlock mb;
-            mb.replaceAll(BinaryData::logo_light_png, BinaryData::logo_light_pngSize);
-            return choc::ui::WebView::Options::Resource{
-                std::string(mb.begin(), mb.end()),
-                choc::web::getMIMETypeFromFilename("favicon.png")};
-        }
-        else if (path == "/favicon.ico")
-        {
-            juce::MemoryBlock mb;
-            mb.replaceAll(BinaryData::favicon_ico, BinaryData::favicon_icoSize);
-            return choc::ui::WebView::Options::Resource{
-                std::string(mb.begin(), mb.end()),
-                choc::web::getMIMETypeFromFilename("favicon.ico")};
-        }
-        else
-        {
-            return choc::ui::WebView::Options::Resource{
-                "", choc::web::getMIMETypeFromFilename("index.html")};
-        }
+
+        return choc::ui::WebView::Options::Resource{"", "text/plain"};
     };
 
     webView = std::make_unique<choc::ui::WebView>(options);
@@ -77,28 +42,29 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
 
     addAndMakeVisible(*webViewContainer);
 
-    auto receiveGainValue = [this](float newGainValue)
+    auto receiveGainValue{[this](float newGainValue)
     {
-        std::string javaScript = "receiveGainValue(" + std::to_string(newGainValue) + ");";
-        webView->evaluateJavascript(javaScript, nullptr);
-    };
+        webView->evaluateJavascript("receiveGainValue(" + std::to_string(newGainValue) + ");",
+                                    nullptr);
+    }};
 
     gainAttachment = std::make_unique<juce::ParameterAttachment>(
         *processorRef.getParamList().getParameter("GAIN"), receiveGainValue);
 
-    auto onGainSliderChanged = [this](const choc::value::ValueView& args) -> choc::value::Value
+    auto onGainSliderChanged{[this](const choc::value::ValueView& args) -> choc::value::Value
     {
-        auto json = juce::JSON::parse(choc::json::toString(args));
+        auto json{juce::JSON::parse(choc::json::toString(args))};
 
         if (json.isArray())
         {
-            float gainVal = json[0].toString().getFloatValue();
+            auto gainVal{json[0].toString().getFloatValue()};
             gainAttachment->setValueAsCompleteGesture(gainVal);
         }
+
         else { return choc::value::Value(-1); }
 
         return choc::value::Value(0);
-    };
+    }};
 
     webView->bind("gainValueCallback", onGainSliderChanged);
 
