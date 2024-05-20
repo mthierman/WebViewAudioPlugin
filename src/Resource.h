@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gui/choc_WebView.h>
-#include <text/choc_MIMETypes.h>
+#include <network/choc_MIMETypes.h>
 #include "BinaryData.h"
 
 struct Resource
@@ -20,6 +20,6 @@ Resource::Resource(std::string path, std::string resourceName) : m_path{path}
 
     m_resource = choc::ui::WebView::Options::Resource{
         std::string(namedResource, dataSize),
-        choc::web::getMIMETypeFromFilename(
+        choc::network::getMIMETypeFromFilename(
             BinaryData::getNamedResourceOriginalFilename(resourceName.c_str()))};
 }
