@@ -40,7 +40,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     webViewContainer->setHWND(webView->getViewHandle());
 #endif
 
-    addAndMakeVisible(*webViewContainer);
+    // addAndMakeVisible(*webViewContainer);
+    addChildComponent(*webViewContainer);
 
     auto receiveGainValue{[this](float newGainValue)
     {
@@ -75,6 +76,8 @@ AudioPluginAudioProcessorEditor::AudioPluginAudioProcessorEditor(AudioPluginAudi
     setResizable(true, true);
     setResizeLimits(400, 300, 800, 600);
     setSize(400, 300);
+
+    webViewContainer->setVisible(true);
 }
 
 AudioPluginAudioProcessorEditor::~AudioPluginAudioProcessorEditor() {}
